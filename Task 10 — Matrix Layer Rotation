@@ -1,0 +1,99 @@
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        int rows = sc.nextInt();
+        int cols = sc.nextInt();
+        int r = sc.nextInt();
+
+        int[][] matrix = new int[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+
+            for (int j = 0; j < cols; j++) {
+
+                matrix[i][j] = sc.nextInt();
+            }
+        }
+
+        rotate(matrix, r);
+
+        for (int i = 0; i < rows; i++) {
+
+            for (int j = 0; j < cols; j++) {
+
+                System.out.print(matrix[i][j] + " ");
+            }
+
+            System.out.println();
+        }
+    }
+
+    static void rotate(int[][] matrix, int r) {
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int layers = Math.min(rows, cols) / 2;
+
+        for (int layer = 0; layer < layers; layer++) {
+
+            ArrayList<Integer> list = new ArrayList<>();
+
+            int top = layer;
+            int left = layer;
+            int bottom = rows - 1 - layer;
+            int right = cols - 1 - layer;
+
+            // Top
+            for (int j = left; j <= right; j++)
+                list.add(matrix[top][j]);
+
+            // Right
+            for (int i = top + 1; i <= bottom; i++)
+                list.add(matrix[i][right]);
+
+            // Bottom
+            for (int j = right - 1; j >= left; j--)
+                list.add(matrix[bottom][j]);
+
+            // Left
+            for (int i = bottom - 1; i > top; i--)
+                list.add(matrix[i][left]);
+
+            int size = list.size();
+
+            int rotation = r % size;
+
+            int index = rotation;
+
+            // Top
+            for (int j = left; j <= right; j++) {
+                matrix[top][j] = list.get(index);
+                index = (index + 1) % size;
+            }
+
+            // Right
+            for (int i = top + 1; i <= bottom; i++) {
+                matrix[i][right] = list.get(index);
+                index = (index + 1) % size;
+            }
+
+            // Bottom
+            for (int j = right - 1; j >= left; j--) {
+                matrix[bottom][j] = list.get(index);
+                index = (index + 1) % size;
+            }
+
+            // Left
+            for (int i = bottom - 1; i > top; i--) {
+                matrix[i][left] = list.get(index);
+                index = (index + 1) % size;
+            }
+        }
+    }
+}
